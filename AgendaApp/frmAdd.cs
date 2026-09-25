@@ -10,9 +10,8 @@ using System.Windows.Forms;
 
 namespace AgendaApp
 {
-    public partial class frmMain : Form
+    public partial class frmAdd : Form
     {
-
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
 
@@ -20,39 +19,31 @@ namespace AgendaApp
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern bool ReleaseCapture();
-
-        public frmMain()
+        public frmAdd()
         {
             InitializeComponent();
         }
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            Environment.Exit(0);
+            this.Hide();
         }
 
-        private void frmMain_MouseDown(object sender, MouseEventArgs e)
+        private void btnAdd_Click(object sender, EventArgs e)
         {
+            MessageBox.Show("Succesfully added!");
+        }
+
+        private void frmAdd_MouseDown(object sender, MouseEventArgs e)
+        {
+
+
             if (e.Button == MouseButtons.Left)
             {
                 ReleaseCapture();
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
         }
-
-        private void btnUpdate_Click(object sender, EventArgs e)
-        {
-            frmUpdate frm = new frmUpdate();   
-            frm.ShowDialog();
-           
-
-        }
-
-        private void btnAdd_Click(object sender, EventArgs e)
-        {
-            frmAdd frm = new frmAdd();
-            frm.ShowDialog();
-        }
     }
-    }
+}
 

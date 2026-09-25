@@ -10,9 +10,8 @@ using System.Windows.Forms;
 
 namespace AgendaApp
 {
-    public partial class frmMain : Form
+    public partial class frmUpdate : Form
     {
-
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
 
@@ -20,19 +19,15 @@ namespace AgendaApp
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern bool ReleaseCapture();
-
-        public frmMain()
+        public frmUpdate()
         {
             InitializeComponent();
         }
 
-        private void btnExit_Click(object sender, EventArgs e)
-        {
-            Environment.Exit(0);
-        }
 
-        private void frmMain_MouseDown(object sender, MouseEventArgs e)
+        private void frmUpdate_MouseDown(object sender, MouseEventArgs e)
         {
+
             if (e.Button == MouseButtons.Left)
             {
                 ReleaseCapture();
@@ -40,19 +35,19 @@ namespace AgendaApp
             }
         }
 
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+        }
+
+        private void frmUpdate_Load(object sender, EventArgs e)
+        {
+            date.MinDate = DateTime.Now;
+        }
+
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            frmUpdate frm = new frmUpdate();   
-            frm.ShowDialog();
-           
-
-        }
-
-        private void btnAdd_Click(object sender, EventArgs e)
-        {
-            frmAdd frm = new frmAdd();
-            frm.ShowDialog();
+            MessageBox.Show("Succesfully updated!");
         }
     }
-    }
-
+}
