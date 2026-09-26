@@ -21,9 +21,17 @@ namespace AgendaApp
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern bool ReleaseCapture();
 
+        DatabaseHelper dbHelper = new DatabaseHelper();
+
+        private void List()
+        {
+            dgvMain.DataSource = dbHelper.List();
+        }
         public frmMain()
         {
             InitializeComponent();
+            List();
+
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -42,9 +50,9 @@ namespace AgendaApp
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            frmUpdate frm = new frmUpdate();   
+            frmUpdate frm = new frmUpdate();
             frm.ShowDialog();
-           
+
 
         }
 
@@ -53,6 +61,16 @@ namespace AgendaApp
             frmAdd frm = new frmAdd();
             frm.ShowDialog();
         }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            dgvMain.Columns[0].HeaderText = "ID";
+
+            dgvMain.Columns[1].HeaderText = "Message";
+
+            dgvMain.Columns[2].HeaderText = "Date";
+
+        }
     }
-    }
+}
 
