@@ -31,8 +31,6 @@ namespace AgendaApp
         {
             InitializeComponent();
             List();
-            
-
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -60,7 +58,7 @@ namespace AgendaApp
             }
             else
             {
-                MessageBox.Show("Please select a note to update!","Warning",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                MessageBox.Show("Please select a note to update!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -80,6 +78,23 @@ namespace AgendaApp
 
             dgvMain.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
+
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+
+            int clickedNoteId = int.Parse(dgvMain.SelectedRows[0].Cells["ID"].Value.ToString());
+
+
+            DialogResult result = MessageBox.Show("Are you sure you want to delete it? ", "Confirmation", MessageBoxButtons.YesNo,
+              MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                dbHelper.DeleteNote(clickedNoteId);
+                List();
+            }
 
         }
     }

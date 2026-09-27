@@ -36,8 +36,8 @@ namespace AgendaApp
         //Getting the notes by ID
         public DataTable GetById(int id)
         {
-            DataTable dt= new DataTable();
-            using (OleDbCommand cmd = new OleDbCommand("SELECT * FROM Agenda  WHERE ID=@id",connection))
+            DataTable dt = new DataTable();
+            using (OleDbCommand cmd = new OleDbCommand("SELECT * FROM Agenda  WHERE ID=@id", connection))
             {
                 cmd.Parameters.AddWithValue("id", id);
                 connection.Open();
@@ -47,7 +47,7 @@ namespace AgendaApp
             }
             connection.Close();
             return dt;
-            
+
         }
 
         //Adding a new note by ID
@@ -76,10 +76,10 @@ namespace AgendaApp
         }
 
         //Updating Notes
-        public void UpdateNote(int id,DateTime date,string message)
+        public void UpdateNote(int id, DateTime date, string message)
         {
             string query = "UPDATE Agenda SET message_date=@date, message=@message WHERE ID=@id ";
-            OleDbCommand cmd= new OleDbCommand(query, connection);
+            OleDbCommand cmd = new OleDbCommand(query, connection);
 
             cmd.Parameters.Add("@message_date", OleDbType.Date).Value = date;
             cmd.Parameters.Add("@message", OleDbType.LongVarWChar).Value = message;
@@ -99,6 +99,32 @@ namespace AgendaApp
             {
                 connection.Close();
             }
+
+        }
+
+        //Deleting Notes by ID
+        public void DeleteNote(int id)
+        {
+
+            string query = "DELETE * FROM Agenda WHERE ID=@id";
+            OleDbCommand cmd = new OleDbCommand(query, connection);
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                connection.Open();
+                cmd.ExecuteNonQuery();
+                System.Windows.Forms.MessageBox.Show("Deleted!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show("Error: " + ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+
 
         }
     }
