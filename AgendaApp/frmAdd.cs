@@ -12,6 +12,7 @@ namespace AgendaApp
 {
     public partial class frmAdd : Form
     {
+        DatabaseHelper dbHelper=new DatabaseHelper();
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
 
@@ -22,6 +23,7 @@ namespace AgendaApp
         public frmAdd()
         {
             InitializeComponent();
+            date.MinDate = DateTime.Now;
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -31,7 +33,16 @@ namespace AgendaApp
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Succesfully added!");
+            if (txtMessage.Text != "")
+            {
+               dbHelper.AddNote(date.Value,txtMessage.Text);
+                this.Hide();
+            }
+            else
+            {
+                MessageBox.Show("Please fill in the message field","Warning",   MessageBoxButtons.OK, MessageBoxIcon.Stop);
+
+            }
         }
 
         private void frmAdd_MouseDown(object sender, MouseEventArgs e)
@@ -44,6 +55,8 @@ namespace AgendaApp
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
         }
+
+     
     }
 }
 

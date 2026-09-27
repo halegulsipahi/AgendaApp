@@ -31,6 +31,7 @@ namespace AgendaApp
         {
             InitializeComponent();
             List();
+            
 
         }
 
@@ -50,18 +51,25 @@ namespace AgendaApp
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            frmUpdate frm = new frmUpdate();
-            frm.ShowDialog();
-
-
+            if (dgvMain.SelectedRows.Count > 0)
+            {
+                frmUpdate frm = new frmUpdate();
+                frm.id = int.Parse(dgvMain.SelectedRows[0].Cells["ID"].Value.ToString());
+                frm.ShowDialog();
+                List();
+            }
+            else
+            {
+                MessageBox.Show("Please select a note to update!","Warning",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+            }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
             frmAdd frm = new frmAdd();
             frm.ShowDialog();
+            List();
         }
-
         private void frmMain_Load(object sender, EventArgs e)
         {
             dgvMain.Columns[0].HeaderText = "ID";
@@ -69,6 +77,9 @@ namespace AgendaApp
             dgvMain.Columns[1].HeaderText = "Message";
 
             dgvMain.Columns[2].HeaderText = "Date";
+
+            dgvMain.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
 
         }
     }

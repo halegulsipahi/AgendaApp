@@ -5,6 +5,7 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AgendaApp
 {
@@ -18,9 +19,10 @@ namespace AgendaApp
         public DatabaseHelper()
         {
             connection = new OleDbConnection(connectionString);
+
         }
 
-        //Listing the entire Agenda 
+        //Listing the entire Agenda  
         public DataTable List()
         {
             DataTable dt = new DataTable();
@@ -31,6 +33,73 @@ namespace AgendaApp
 
         }
 
+        //Getting the notes by ID
+        public DataTable GetById(int id)
+        {
+            DataTable dt= new DataTable();
+            using (OleDbCommand cmd = new OleDbCommand("SELECT * FROM Agenda  WHERE ID=@id",connection))
+            {
+                cmd.Parameters.AddWithValue("id", id);
+                connection.Open();
+                OleDbDataAdapter da = new OleDbDataAdapter(cmd);
+                da.Fill(dt);
 
+            }
+            connection.Close();
+            return dt;
+            
+        }
+
+        //Adding a new note by ID
+        public void AddNote(DateTime date, string message)
+        {
+            string query = "INSERT INTO Agenda ([message],[message_date]) VALUES (?, ?)";
+            OleDbCommand cmd = new OleDbCommand(query, connection);
+
+            cmd.Parameters.Add("@message", OleDbType.LongVarWChar).Value = message;
+            cmd.Parameters.Add("@message_date", OleDbType.Date).Value = date;
+
+            try
+            {
+                connection.Open();
+                cmd.ExecuteNonQuery();
+                System.Windows.Forms.MessageBox.Show("Added!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show("Error: " + ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        //Updating Notes
+        public void UpdateNote(int id,DateTime date,string message)
+        {
+            string query = "UPDATE Agenda SET message_date=@date, message=@message WHERE ID=@id ";
+            OleDbCommand cmd= new OleDbCommand(query, connection);
+
+            cmd.Parameters.Add("@message_date", OleDbType.Date).Value = date;
+            cmd.Parameters.Add("@message", OleDbType.LongVarWChar).Value = message;
+            cmd.Parameters.Add("@id", OleDbType.Integer).Value = id;
+
+            try
+            {
+                connection.Open();
+                cmd.ExecuteNonQuery();
+                System.Windows.Forms.MessageBox.Show("Updated!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show("Error: " + ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+        }
     }
 }

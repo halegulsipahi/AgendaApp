@@ -55,7 +55,7 @@
             // 
             // date
             // 
-            this.date.CustomFormat = "dd.mm.yyyy | HH:mm";
+            this.date.CustomFormat = "dd.MM.yyyy | HH:mm";
             this.date.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.date.Location = new System.Drawing.Point(111, 42);
             this.date.Name = "date";

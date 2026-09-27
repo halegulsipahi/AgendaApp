@@ -19,9 +19,13 @@ namespace AgendaApp
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern bool ReleaseCapture();
+
+        public int id;
+        DatabaseHelper dbHelper = new DatabaseHelper();
         public frmUpdate()
         {
             InitializeComponent();
+
         }
 
 
@@ -43,11 +47,27 @@ namespace AgendaApp
         private void frmUpdate_Load(object sender, EventArgs e)
         {
             date.MinDate = DateTime.Now;
+            DataTable dt = dbHelper.GetById(id);
+            if (dt.Rows.Count > 0)
+            {
+                txtMessage.Text = dt.Rows[0]["Message"].ToString();
+                date.Value = Convert.ToDateTime(dt.Rows[0]["message_date"]);
+            }
+
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Succesfully updated!");
+            if (!string.IsNullOrEmpty(txtMessage.Text))
+            {
+                dbHelper.UpdateNote(id, date.Value, txtMessage.Text);
+                this.Hide();
+            }
+            else
+            {
+                MessageBox.Show("The message field is required!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+               
+            }
         }
     }
 }
