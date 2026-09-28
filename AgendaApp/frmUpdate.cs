@@ -46,7 +46,7 @@ namespace AgendaApp
 
         private void frmUpdate_Load(object sender, EventArgs e)
         {
-            date.MinDate = DateTime.Now;
+           
             DataTable dt = dbHelper.GetById(id);
             if (dt.Rows.Count > 0)
             {

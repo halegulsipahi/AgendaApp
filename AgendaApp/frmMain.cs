@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Net.Mime.MediaTypeNames;
+
 
 namespace AgendaApp
 {
@@ -32,13 +32,30 @@ namespace AgendaApp
         {
             InitializeComponent();
 
+            ContextMenuStrip trayMenu = new ContextMenuStrip();
+            trayMenu.Items.Add("Open", null, (s, e) => { this.Show(); this.Activate(); });
+            trayMenu.Items.Add("Exit", null, (s, e) => { notifyIcon1.Visible = false; Environment.Exit(0); });
+            notifyIcon1.ContextMenuStrip = trayMenu;
+            notifyIcon1.BalloonTipClicked += (s, e) => { this.Show(); this.Activate(); };
             List();
 
         }
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            Environment.Exit(0);
+            DialogResult dialogResult = MessageBox.Show(
+        "Yes: Exit completely\nNo: Keep running in the tray",
+        "Exit", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            if (dialogResult == DialogResult.Yes)
+            {
+                notifyIcon1.Visible = false;
+                Environment.Exit(0);
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                this.Hide();
+            }
+
         }
 
         private void frmMain_MouseDown(object sender, MouseEventArgs e)
@@ -125,13 +142,23 @@ namespace AgendaApp
                 DateTime time = Convert.ToDateTime(row["message_date"]);
                 text += time.ToString("HH:mm") + " - " + row["message"].ToString() + "\n";
             }
-
-            MessageBox.Show(text +"deleted ", "Reminder", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (this.Visible)
+                MessageBox.Show(text + " \nThese notes have been deleted.", "Reminder", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            else
+                notifyIcon1.ShowBalloonTip(5000, "Reminder", text, ToolTipIcon.Info);
 
             dbHelper.DeleteDueNotes(until);
             List();
             timer1.Start();
         }
+
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            this.Show();
+            this.Activate();
+        }
+
+
     }
 }
 
