@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace AgendaApp
 {
@@ -30,7 +31,9 @@ namespace AgendaApp
         public frmMain()
         {
             InitializeComponent();
+
             List();
+
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -83,6 +86,11 @@ namespace AgendaApp
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
+            if (dgvMain.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Select a message to delete!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             int clickedNoteId = int.Parse(dgvMain.SelectedRows[0].Cells["ID"].Value.ToString());
 
@@ -96,6 +104,33 @@ namespace AgendaApp
                 List();
             }
 
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            DateTime now = DateTime.Now;
+            DateTime until = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, 0);
+            DataTable due = dbHelper.GetDueNotes(until);
+
+            if (due.Rows.Count == 0)
+            {
+                return;
+            }
+            timer1.Stop();
+
+            string text = "";
+
+            foreach (DataRow row in due.Rows)
+            {
+                DateTime time = Convert.ToDateTime(row["message_date"]);
+                text += time.ToString("HH:mm") + " - " + row["message"].ToString() + "\n";
+            }
+
+            MessageBox.Show(text +"deleted ", "Reminder", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            dbHelper.DeleteDueNotes(until);
+            List();
+            timer1.Start();
         }
     }
 }
