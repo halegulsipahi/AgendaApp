@@ -107,5 +107,3 @@ Press **F5** to build and run the application.[](url)
   * GitHub: [@halegulsipahi](https://github.com/halegulsipahi)  
   * LinkedIn: [Hale Gül Sipahi](https://linkedin.com/in/halegulsipahi)
 
-* **Acknowledgments & Resources:**  
-  * Special thanks to **Görkemli Yazılım** (Udemy) for the course tutorials, foundational guidance, and architecture walkthroughs that inspired this project.
